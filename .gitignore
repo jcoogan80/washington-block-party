@@ -22,9 +22,6 @@ Thumbs.db
 # Build output (none expected, but just in case)
 dist/
 build/
-
-# Seed script secrets & junk binaries
 seed/serviceaccount.json
-seed/cd
-seed/node
-seed/npm
+# Local Netlify folder
+.netlify
