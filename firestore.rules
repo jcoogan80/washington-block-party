@@ -9,14 +9,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthed()
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    function isApproved() {
-      return isAuthed()
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.approved == true;
     }
 
     function isOwner(uid) {
@@ -28,71 +21,51 @@ service cloud.firestore {
     }
 
     // ── users ─────────────────────────────────────────────────────────────
-    // Any authenticated user can read (needed to check own approval status).
-    // A user can create their own doc on registration.
-    // Only admins can update other users (approve/deny/promote).
     match /users/{uid} {
-      allow read:   if isAuthed();
-      allow create: if isOwner(uid);
-      allow update: if isAdmin() || isOwner(uid);
-      allow delete: if isAdmin();
-    }
-
-    // ── settings ──────────────────────────────────────────────────────────
-    match /settings/{docId} {
-      allow read:  if isApproved();
-      allow write: if isAdmin();
-    }
-
-    // ── announcements ─────────────────────────────────────────────────────
-    // Approved users can update the `reactions` map only.
-    // Admins can create / update / delete freely.
-    match /announcements/{docId} {
-      allow read:   if isApproved();
-      allow create: if isAdmin();
-      allow update: if isAdmin()
-                    || (isApproved() && onlyUpdatingField('reactions'));
-      allow delete: if isAdmin();
+      allow read:  if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid) || isAdmin();
     }
 
     // ── directory ─────────────────────────────────────────────────────────
-    match /directory/{uid} {
-      allow read:   if isApproved();
-      allow create: if isOwner(uid) || isAdmin();
-      allow update: if isOwner(uid) || isAdmin();
-      allow delete: if isAdmin();
-    }
-
-    // ── schedule ──────────────────────────────────────────────────────────
-    match /schedule/{docId} {
-      allow read:  if isApproved();
+    match /directory/{docId} {
+      allow read:  if isAuthed();
       allow write: if isAdmin();
     }
 
     // ── activities ────────────────────────────────────────────────────────
-    // Approved users can update the `signups` array only.
+    // Authenticated users can update the `volunteers` field only.
     match /activities/{docId} {
-      allow read:   if isApproved();
+      allow read:   if isAuthed();
       allow create: if isAdmin();
       allow update: if isAdmin()
-                    || (isApproved() && onlyUpdatingField('signups'));
+                    || (isAuthed() && onlyUpdatingField('volunteers'));
       allow delete: if isAdmin();
     }
 
     // ── chat ──────────────────────────────────────────────────────────────
     match /chat/{msgId} {
-      allow read:   if isApproved();
-      allow create: if isApproved()
-                    && request.resource.data.uid == request.auth.uid
-                    && request.resource.data.keys().hasAll(['uid','displayName','message','createdAt']);
-      allow update: if false;   // messages are immutable
+      allow read:   if isAuthed();
+      allow create: if isAuthed();
+      allow update: if false;
       allow delete: if isAdmin()
-                    || (isApproved() && resource.data.uid == request.auth.uid);
+                    || (isAuthed() && resource.data.uid == request.auth.uid);
+    }
+
+    // ── announcements ─────────────────────────────────────────────────────
+    match /announcements/{docId} {
+      allow read:  if isAuthed();
+      allow write: if isAdmin();
+    }
+
+    // ── schedule ──────────────────────────────────────────────────────────
+    match /schedule/{docId} {
+      allow read:  if isAuthed();
+      allow write: if isAdmin();
     }
 
     // ── history ───────────────────────────────────────────────────────────
     match /history/{docId} {
-      allow read:  if isApproved();
+      allow read:  if isAuthed();
       allow write: if isAdmin();
     }
   }
