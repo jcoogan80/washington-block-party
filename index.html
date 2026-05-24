@@ -37,10 +37,23 @@
         <div class="form-group">
           <label for="login-password">Password</label>
           <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+          <a href="#" id="show-forgot" class="forgot-link">Forgot password?</a>
         </div>
         <div id="login-error" class="form-error" hidden></div>
         <button type="submit" class="btn btn-primary btn-full">Sign In</button>
         <p class="auth-switch">New to the block? <a href="#" id="show-register">Create an account</a></p>
+      </form>
+
+      <form id="forgot-form" class="auth-form" hidden novalidate>
+        <h2>Reset Password</h2>
+        <div class="form-group">
+          <label for="forgot-email">Email</label>
+          <input id="forgot-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div id="forgot-error" class="form-error" hidden></div>
+        <div id="forgot-success" class="forgot-success" hidden>Check your email for a reset link</div>
+        <button type="submit" class="btn btn-primary btn-full">Send Reset Link</button>
+        <p class="auth-switch"><a href="#" id="show-login-from-forgot">Back to sign in</a></p>
       </form>
 
       <form id="register-form" class="auth-form" hidden novalidate>

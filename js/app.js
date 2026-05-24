@@ -1,4 +1,4 @@
-import { loginUser, registerUser, logoutUser, getUserDoc, watchAuthState } from './auth.js';
+import { loginUser, registerUser, logoutUser, getUserDoc, watchAuthState, resetPassword } from './auth.js';
 import { db } from './firebase-config.js';
 import {
   collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy
@@ -190,15 +190,48 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
 });
 
 // ── Auth form toggle ──────────────────────────────────────────────────────────
+function showAuthForm(id) {
+  ['login-form', 'register-form', 'forgot-form'].forEach(f => {
+    document.getElementById(f).hidden = (f !== id);
+  });
+}
+
 document.getElementById('show-register').addEventListener('click', (e) => {
   e.preventDefault();
-  document.getElementById('login-form').hidden    = true;
-  document.getElementById('register-form').hidden = false;
+  showAuthForm('register-form');
 });
 document.getElementById('show-login').addEventListener('click', (e) => {
   e.preventDefault();
-  document.getElementById('register-form').hidden = true;
-  document.getElementById('login-form').hidden    = false;
+  showAuthForm('login-form');
+});
+document.getElementById('show-forgot').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('forgot-error').hidden   = true;
+  document.getElementById('forgot-success').hidden = true;
+  document.getElementById('forgot-email').value    = '';
+  showAuthForm('forgot-form');
+});
+document.getElementById('show-login-from-forgot').addEventListener('click', (e) => {
+  e.preventDefault();
+  showAuthForm('login-form');
+});
+
+// ── Forgot Password Form ──────────────────────────────────────────────────────
+document.getElementById('forgot-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email     = document.getElementById('forgot-email').value.trim();
+  const errorEl   = document.getElementById('forgot-error');
+  const successEl = document.getElementById('forgot-success');
+  errorEl.hidden   = true;
+  successEl.hidden = true;
+  try {
+    await resetPassword(email);
+    successEl.hidden = false;
+    document.getElementById('forgot-email').value = '';
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.hidden = false;
+  }
 });
 
 // ── Logout ────────────────────────────────────────────────────────────────────
