@@ -129,8 +129,10 @@ textarea { min-height: 90px; resize: vertical; }
   padding: 3rem 2rem;
 }
 .auth-hero-img {
-  max-width: 280px;
+  max-width: 320px;
+  max-height: 55vh;
   width: 100%;
+  object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 8px 28px rgba(0,0,0,.40);
   display: block;
