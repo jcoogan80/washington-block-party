@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Shared helpers ────────────────────────────────────────────────────
+    function isAuthed() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthed()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isApproved() {
+      return isAuthed()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.approved == true;
+    }
+
+    function isOwner(uid) {
+      return isAuthed() && request.auth.uid == uid;
+    }
+
+    function onlyUpdatingField(fieldName) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([fieldName]);
+    }
+
+    // ── users ─────────────────────────────────────────────────────────────
+    // Any authenticated user can read (needed to check own approval status).
+    // A user can create their own doc on registration.
+    // Only admins can update other users (approve/deny/promote).
+    match /users/{uid} {
+      allow read:   if isAuthed();
+      allow create: if isOwner(uid);
+      allow update: if isAdmin() || isOwner(uid);
+      allow delete: if isAdmin();
+    }
+
+    // ── settings ──────────────────────────────────────────────────────────
+    match /settings/{docId} {
+      allow read:  if isApproved();
+      allow write: if isAdmin();
+    }
+
+    // ── announcements ─────────────────────────────────────────────────────
+    // Approved users can update the `reactions` map only.
+    // Admins can create / update / delete freely.
+    match /announcements/{docId} {
+      allow read:   if isApproved();
+      allow create: if isAdmin();
+      allow update: if isAdmin()
+                    || (isApproved() && onlyUpdatingField('reactions'));
+      allow delete: if isAdmin();
+    }
+
+    // ── directory ─────────────────────────────────────────────────────────
+    match /directory/{uid} {
+      allow read:   if isApproved();
+      allow create: if isOwner(uid) || isAdmin();
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── schedule ──────────────────────────────────────────────────────────
+    match /schedule/{docId} {
+      allow read:  if isApproved();
+      allow write: if isAdmin();
+    }
+
+    // ── activities ────────────────────────────────────────────────────────
+    // Approved users can update the `signups` array only.
+    match /activities/{docId} {
+      allow read:   if isApproved();
+      allow create: if isAdmin();
+      allow update: if isAdmin()
+                    || (isApproved() && onlyUpdatingField('signups'));
+      allow delete: if isAdmin();
+    }
+
+    // ── chat ──────────────────────────────────────────────────────────────
+    match /chat/{msgId} {
+      allow read:   if isApproved();
+      allow create: if isApproved()
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.keys().hasAll(['uid','displayName','message','createdAt']);
+      allow update: if false;   // messages are immutable
+      allow delete: if isAdmin()
+                    || (isApproved() && resource.data.uid == request.auth.uid);
+    }
+
+    // ── history ───────────────────────────────────────────────────────────
+    match /history/{docId} {
+      allow read:  if isApproved();
+      allow write: if isAdmin();
+    }
+  }
+}

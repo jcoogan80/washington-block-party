@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Washington Street Block Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ── Auth Screen ─────────────────────────────────────────────── -->
+  <div id="auth-screen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-icon">🏘️</div>
+        <h1>Washington Street<br>Block Party</h1>
+      </div>
+
+      <form id="login-form" class="auth-form" novalidate>
+        <h2>Welcome Back!</h2>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <div id="login-error" class="form-error" hidden></div>
+        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+        <p class="auth-switch">New to the block? <a href="#" id="show-register">Create an account</a></p>
+      </form>
+
+      <form id="register-form" class="auth-form" hidden novalidate>
+        <h2>Join the Block!</h2>
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input id="reg-name" type="text" placeholder="Jane Smith" autocomplete="name" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input id="reg-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input id="reg-password" type="password" placeholder="At least 6 characters" autocomplete="new-password" required>
+        </div>
+        <div id="reg-error" class="form-error" hidden></div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        <div class="auth-notice">
+          <span>ℹ️</span>
+          Your account must be approved by the organizer before you can access the site.
+        </div>
+        <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Pending Approval Screen ──────────────────────────────────── -->
+  <div id="pending-screen" class="auth-wrap" hidden>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-icon">⏳</div>
+        <h1>Washington Street<br>Block Party</h1>
+      </div>
+      <div class="pending-content">
+        <h2>Account Pending Approval</h2>
+        <p>Thanks for registering, <strong id="pending-name"></strong>!</p>
+        <p>The block party organizer will review your account shortly. You'll be able to log in once approved.</p>
+        <p class="text-muted">Check back later or reach out to the organizer directly.</p>
+      </div>
+      <button id="pending-logout-btn" class="btn btn-outline" style="margin-top:1.5rem">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- ── Main App ──────────────────────────────────────────────────── -->
+  <div id="app" hidden>
+
+    <header id="app-header">
+      <div class="header-brand">
+        <span class="brand-icon">🏘️</span>
+        <span class="brand-name">Washington St Block Party</span>
+      </div>
+      <div class="header-actions">
+        <span id="header-user-name" class="header-username"></span>
+        <button id="admin-panel-btn" class="btn-icon" title="Admin Panel" hidden>⚙️</button>
+        <button id="logout-btn" class="btn btn-outline btn-sm">Sign Out</button>
+      </div>
+    </header>
+
+    <nav id="tab-nav" role="tablist">
+      <div class="tab-nav-inner">
+        <button class="tab-btn active" data-tab="announcements" role="tab">🏠 Home</button>
+        <button class="tab-btn" data-tab="directory" role="tab">👥 Directory</button>
+        <button class="tab-btn" data-tab="schedule" role="tab">📅 Schedule</button>
+        <button class="tab-btn" data-tab="activities" role="tab">🎯 Activities</button>
+        <button class="tab-btn" data-tab="chat" role="tab">💬 Chat</button>
+        <button class="tab-btn" data-tab="history" role="tab">📸 History</button>
+      </div>
+    </nav>
+
+    <main id="app-main">
+      <section id="tab-announcements" class="tab-panel active" role="tabpanel"></section>
+      <section id="tab-directory"     class="tab-panel" role="tabpanel"></section>
+      <section id="tab-schedule"      class="tab-panel" role="tabpanel"></section>
+      <section id="tab-activities"    class="tab-panel" role="tabpanel"></section>
+      <section id="tab-chat"          class="tab-panel" role="tabpanel"></section>
+      <section id="tab-history"       class="tab-panel" role="tabpanel"></section>
+    </main>
+
+  </div>
+
+  <!-- ── Admin Modal ──────────────────────────────────────────────── -->
+  <div id="admin-modal" class="modal" hidden aria-modal="true" role="dialog">
+    <div class="modal-overlay" data-close-modal="admin-modal"></div>
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>⚙️ Admin Panel</h3>
+        <button class="modal-close" data-close-modal="admin-modal">✕</button>
+      </div>
+      <div class="modal-body" id="admin-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── Confirm Modal ────────────────────────────────────────────── -->
+  <div id="confirm-modal" class="modal" hidden aria-modal="true" role="dialog">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-sm">
+      <div class="modal-header">
+        <h3 id="confirm-title">Confirm</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button id="confirm-cancel" class="btn btn-outline">Cancel</button>
+        <button id="confirm-ok" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast Container ──────────────────────────────────────────── -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

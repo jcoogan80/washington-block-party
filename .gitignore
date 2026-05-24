@@ -1,0 +1,24 @@
+# Dependencies / tools
+node_modules/
+.npm/
+
+# Firebase CLI
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Environment & secrets — never commit real Firebase config values
+.env
+.env.*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+*.swp
+*~
+
+# Build output (none expected, but just in case)
+dist/
+build/
