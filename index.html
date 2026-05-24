@@ -4,13 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Washington Street Block Party</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
   <!-- ── Auth Screen ─────────────────────────────────────────────── -->
   <div id="auth-screen" class="auth-wrap">
-    <div class="auth-card">
+
+    <!-- Left: navy blue branding panel -->
+    <div class="auth-left">
+      <img src="images/george.png" alt="George" class="auth-hero-img">
+      <p class="auth-tagline">Let's Get Involved!</p>
+    </div>
+
+    <!-- Right: form panel -->
+    <div class="auth-right">
+      <div class="auth-card">
       <div class="auth-logo">
         <div class="auth-icon">🏘️</div>
         <h1>Washington Street<br>Block Party</h1>
@@ -53,8 +65,9 @@
         </div>
         <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
       </form>
-    </div>
-  </div>
+      </div><!-- /.auth-card -->
+    </div><!-- /.auth-right -->
+  </div><!-- /.auth-wrap -->
 
   <!-- ── Pending Approval Screen ──────────────────────────────────── -->
   <div id="pending-screen" class="auth-wrap" hidden>

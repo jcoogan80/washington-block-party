@@ -116,9 +116,41 @@ textarea { min-height: 90px; resize: vertical; }
 /* ── Auth Screen ───────────────────────────────────────────────────────────── */
 .auth-wrap {
   min-height: 100vh;
+  display: flex;
+}
+
+/* Left navy panel */
+.auth-left {
+  flex: 0 0 42%;
+  background: var(--nav);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.75rem;
+  padding: 3rem 2rem;
+}
+.auth-hero-img {
+  max-width: 280px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.40);
+  display: block;
+}
+.auth-tagline {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #F5A623;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Right form panel */
+.auth-right {
+  flex: 1;
+  background: var(--bg);
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #1B2B5E 0%, #263d85 50%, #1B2B5E 100%);
-  padding: 1rem;
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
 }
 .auth-card {
   background: var(--card-bg);
@@ -127,6 +159,13 @@ textarea { min-height: 90px; resize: vertical; }
   width: 100%; max-width: 420px;
   box-shadow: var(--shadow-lg);
 }
+
+/* Pending screen reuses auth-wrap but stays single-column */
+#pending-screen.auth-wrap {
+  background: linear-gradient(135deg, #1B2B5E 0%, #263d85 100%);
+  align-items: center; justify-content: center;
+}
+
 .auth-logo {
   text-align: center; margin-bottom: 1.75rem;
 }
@@ -144,6 +183,19 @@ textarea { min-height: 90px; resize: vertical; }
 .pending-content { text-align: center; color: var(--text); }
 .pending-content h2 { color: var(--nav); margin-bottom: 1rem; }
 .pending-content p { margin-bottom: .6rem; }
+
+/* ── Auth responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .auth-wrap { flex-direction: column; }
+  .auth-left {
+    flex: 0 0 auto;
+    padding: 2rem 1.5rem;
+    gap: 1.25rem;
+  }
+  .auth-hero-img { max-width: 180px; }
+  .auth-tagline  { font-size: 1.5rem; }
+  .auth-right    { padding: 1.75rem 1rem; }
+}
 
 /* ── Header ────────────────────────────────────────────────────────────────── */
 #app-header {
