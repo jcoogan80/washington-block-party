@@ -10,6 +10,7 @@ import { init as initSchedule }      from './schedule.js';
 import { init as initActivities }    from './activities.js';
 import { init as initChat }          from './chat.js';
 import { init as initHistory }       from './history.js';
+import { init as initTrivia }        from './trivia.js';
 
 // ── Shared State ─────────────────────────────────────────────────────────────
 // Passed by reference to every module so all see current values.
@@ -26,6 +27,7 @@ const moduleMap = {
   directory:     initDirectory,
   schedule:      initSchedule,
   activities:    initActivities,
+  trivia:        initTrivia,
   chat:          initChat,
   history:       initHistory
 };
