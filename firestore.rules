@@ -87,6 +87,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ── vendors ───────────────────────────────────────────────────────────
+    match /vendors/{docId} {
+      allow read:  if isAuthed();
+      allow write: if isAdmin();
+    }
+
     // ── poll ──────────────────────────────────────────────────────────────
     // Each document ID = uid. Users can read/write only their own vote.
     // Admins can read all documents to tally results.

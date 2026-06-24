@@ -727,6 +727,29 @@ textarea { min-height: 90px; resize: vertical; }
 #trivia-qr-code img,
 #trivia-qr-code canvas { display: block; border-radius: var(--radius-sm); }
 
+/* ── Vendors & Resources ───────────────────────────────────────────────────── */
+.vendors-section h2 { color: var(--nav); }
+.vendors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.vendor-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+.vendor-category {
+  font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--text-muted); margin-bottom: .25rem;
+}
+.vendor-name { font-size: 1rem; font-weight: 700; color: var(--nav); margin-bottom: .5rem; }
+.vendor-detail { font-size: .85rem; color: var(--text-muted); margin-bottom: .2rem; line-height: 1.4; }
+.vendor-detail a { color: var(--accent-dark); font-weight: 600; }
+.vendor-detail a:hover { text-decoration: underline; }
+
 /* ── 2025 Reference Itinerary ──────────────────────────────────────────────── */
 .ref-itinerary {
   margin-top: 2rem;
