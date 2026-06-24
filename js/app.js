@@ -11,6 +11,7 @@ import { init as initActivities }    from './activities.js';
 import { init as initChat }          from './chat.js';
 import { init as initHistory }       from './history.js';
 import { init as initTrivia }        from './trivia.js';
+import { init as initBudget }        from './budget.js';
 
 // ── Shared State ─────────────────────────────────────────────────────────────
 // Passed by reference to every module so all see current values.
@@ -28,6 +29,7 @@ const moduleMap = {
   schedule:      initSchedule,
   activities:    initActivities,
   trivia:        initTrivia,
+  budget:        initBudget,
   chat:          initChat,
   history:       initHistory
 };

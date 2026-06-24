@@ -102,5 +102,28 @@ service cloud.firestore {
       allow write: if isOwner(uid);   // users submit/update their own vote only
     }
 
+    // ── dues ──────────────────────────────────────────────────────────────────
+    // Document ID = uid. Users read/write their own doc but can never set
+    // status to 'paid' — only admin can flip that.
+    match /dues/{uid} {
+      allow read:   if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid)
+                    && request.resource.data.status == 'unpaid';
+      allow update: if isAdmin()
+                    || (isOwner(uid) && request.resource.data.status == 'unpaid');
+    }
+
+    // ── expenses ──────────────────────────────────────────────────────────────
+    // Users read/create only their own pending expenses.
+    // Only admin can update (mark reimbursed) or delete.
+    match /expenses/{docId} {
+      allow read:   if resource.data.submittedBy == request.auth.uid || isAdmin();
+      allow create: if isAuthed()
+                    && request.resource.data.submittedBy == request.auth.uid
+                    && request.resource.data.status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
   }
 }
