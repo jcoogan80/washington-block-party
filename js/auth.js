@@ -29,7 +29,7 @@ export async function registerUser(email, password, displayName) {
     displayName,
     email,
     role:      'user',
-    approved:  false,
+    approved:  true,
     createdAt: serverTimestamp()
   });
 
