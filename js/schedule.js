@@ -53,6 +53,7 @@ export function init(container, state, utils) {
     <div id="schedule-list"></div>
     <div id="schedule-ref"></div>
     <div id="vendors-wrap"></div>
+    <div id="garbage-note"></div>
   `;
 
   if (state.isAdmin) {
@@ -72,6 +73,7 @@ export function init(container, state, utils) {
 
   renderRefItinerary(container.querySelector('#schedule-ref'));
   initVendors(container.querySelector('#vendors-wrap'), state, utils);
+  renderGarbageNote(container.querySelector('#garbage-note'));
 }
 
 function renderRefItinerary(wrap) {
@@ -99,6 +101,31 @@ function renderRefItinerary(wrap) {
         </div>
       </div>
     </details>
+  `;
+}
+
+function renderGarbageNote(wrap) {
+  wrap.innerHTML = `
+    <div class="garbage-note" role="note">
+      <div class="garbage-note-title">🗑️ Heads Up: Holiday Garbage Schedule</div>
+      <p>
+        If the block party falls during a week with a holiday, our normal
+        <strong>Friday garbage pickup shifts to Saturday</strong>. Plan accordingly
+        so carts aren't blocking the street during the party!
+      </p>
+      <p>
+        Garbage in Park Ridge, IL is collected weekly by
+        <strong>SBC Waste Solutions</strong>, with curbside pickup for standard
+        carts and up to two bulk items per week. Carts must be placed curbside
+        or in the alley by <strong>7 AM</strong>, with at least 2 feet of space
+        between carts and wheels facing the house.
+      </p>
+      <p>
+        To confirm your holiday pickup day or request cart swaps&nbsp;/&nbsp;additional
+        carts ($85), call SBC Waste Solutions:
+        <a href="tel:3125221115" class="garbage-note-phone">312-522-1115</a>
+      </p>
+    </div>
   `;
 }
 

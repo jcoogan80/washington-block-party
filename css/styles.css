@@ -804,6 +804,35 @@ details[open].ref-itinerary .ref-chevron { transform: rotate(90deg); }
 }
 .ref-title { color: var(--text); }
 
+/* ── Garbage Note ──────────────────────────────────────────────────────────── */
+.garbage-note {
+  background: #fffbeb;
+  border: 1.5px solid #f59e0b;
+  border-left: 5px solid #f59e0b;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: .9rem;
+  line-height: 1.65;
+  color: #78350f;
+}
+.garbage-note-title {
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: .6rem;
+  color: #92400e;
+}
+.garbage-note p { margin: 0 0 .6rem; }
+.garbage-note p:last-child { margin-bottom: 0; }
+.garbage-note-phone {
+  font-weight: 700;
+  color: #b45309;
+  text-decoration: none;
+  border-bottom: 1.5px solid #f59e0b;
+  transition: color .15s;
+}
+.garbage-note-phone:hover { color: #78350f; }
+
 /* ── Date Poll ─────────────────────────────────────────────────────────────── */
 .poll-card {
   background: var(--card-bg);
