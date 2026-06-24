@@ -7,9 +7,13 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // Safe isAdmin: uses exists() guard + .get() with default to avoid errors
+    // if the caller's document is missing.  Also split out from isOwner checks
+    // on /users so that reading your own doc never triggers a get() on itself.
     function isAdmin() {
       return isAuthed()
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin';
     }
 
     function isOwner(uid) {
@@ -21,15 +25,21 @@ service cloud.firestore {
     }
 
     // ── users ─────────────────────────────────────────────────────────────
+    // Split into two allow-read rules so a user reading their OWN document
+    // never triggers the get() inside isAdmin() — that circular get() was
+    // causing "Missing or insufficient permissions" on every login.
     match /users/{uid} {
-      allow read:  if isOwner(uid) || isAdmin();
+      allow read:  if isOwner(uid);            // self-read — no get() involved
+      allow read:  if isAdmin();               // admin read — separate rule
       allow write: if isOwner(uid) || isAdmin();
     }
 
     // ── directory ─────────────────────────────────────────────────────────
+    // Allow users to create/update their own directory entry (needed during
+    // registration — previously "write: if isAdmin()" blocked all signups).
     match /directory/{docId} {
       allow read:  if isAuthed();
-      allow write: if isAdmin();
+      allow write: if isOwner(docId) || isAdmin();
     }
 
     // ── activities ────────────────────────────────────────────────────────
