@@ -804,6 +804,43 @@ details[open].ref-itinerary .ref-chevron { transform: rotate(90deg); }
 }
 .ref-title { color: var(--text); }
 
+/* ── Block Party Permit Info ───────────────────────────────────────────────── */
+.permit-info {
+  margin-top: 1.5rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.permit-badge {
+  background: #e0f0ff; color: #1a5fa8;
+  border: 1px solid #b3d4f5;
+  font-size: .68rem;
+}
+.permit-section { margin-bottom: 1.1rem; }
+.permit-section-title {
+  font-size: .78rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--text-muted);
+  margin-bottom: .45rem;
+}
+.permit-list {
+  margin: 0; padding-left: 1.3rem;
+  font-size: .875rem; color: var(--text);
+  line-height: 1.65;
+  display: flex; flex-direction: column; gap: .3rem;
+}
+.permit-phone {
+  font-weight: 700; color: var(--accent-dark);
+  text-decoration: none; border-bottom: 1px solid var(--border);
+}
+.permit-phone:hover { text-decoration: underline; }
+.permit-apply-btn {
+  display: inline-block;
+  margin-top: .5rem;
+  text-decoration: none;
+}
+
 /* ── Garbage Note ──────────────────────────────────────────────────────────── */
 .garbage-note {
   background: #fffbeb;

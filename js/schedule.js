@@ -53,6 +53,7 @@ export function init(container, state, utils) {
     <div id="schedule-list"></div>
     <div id="schedule-ref"></div>
     <div id="vendors-wrap"></div>
+    <div id="permit-info"></div>
     <div id="garbage-note"></div>
   `;
 
@@ -73,6 +74,7 @@ export function init(container, state, utils) {
 
   renderRefItinerary(container.querySelector('#schedule-ref'));
   initVendors(container.querySelector('#vendors-wrap'), state, utils);
+  renderPermitInfo(container.querySelector('#permit-info'));
   renderGarbageNote(container.querySelector('#garbage-note'));
 }
 
@@ -126,6 +128,66 @@ function renderGarbageNote(wrap) {
         <a href="tel:3125221115" class="garbage-note-phone">312-522-1115</a>
       </p>
     </div>
+  `;
+}
+
+// ── Permit Info ───────────────────────────────────────────────────────────────
+
+function renderPermitInfo(wrap) {
+  wrap.innerHTML = `
+    <details class="permit-info">
+      <summary class="ref-summary">
+        <span class="ref-summary-label">
+          🚧 Block Party Permit (City of Park Ridge)
+        </span>
+        <span class="badge permit-badge">Planning</span>
+        <span class="ref-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="ref-body">
+        <p class="ref-subtitle">
+          Required if closing the street — here's what you need to know.
+        </p>
+
+        <div class="permit-section">
+          <div class="permit-section-title">Key Requirements</div>
+          <ul class="permit-list">
+            <li>Only local streets on the City's Street Classification Map (or approved collector streets) may be closed</li>
+            <li>Street closure cannot extend past <strong>10:30 PM</strong></li>
+            <li>All residents on the block must be notified before applying</li>
+            <li>You can request Fire or Police Department presence (specify number of children if applicable)</li>
+            <li>Indicate number of barricades needed and drop-off/pickup locations</li>
+          </ul>
+        </div>
+
+        <div class="permit-section">
+          <div class="permit-section-title">Application Process</div>
+          <ol class="permit-list">
+            <li>Gather details: date, time, street name, cross streets, rain date, purpose, number of barricades</li>
+            <li>Complete the official Block Party Application</li>
+            <li>Submit to the Public Works Service Center (mail or fax per form)</li>
+            <li>Pay fees: <strong>$50/day</strong> base permit fee + possible additional fees for City services (police/fire/signs/electric/tents/stages)</li>
+            <li>Apply at least <strong>30 days in advance</strong> (60 days if using a public right-of-way)</li>
+          </ol>
+        </div>
+
+        <div class="permit-section">
+          <div class="permit-section-title">Additional Notes</div>
+          <ul class="permit-list">
+            <li>No applications or date-saving accepted before <strong>January 1</strong> of the event year</li>
+            <li>If expecting 1,000+ attendees, a state Emergency Medical Services Plan is required (allow up to 60 days for approval)</li>
+            <li>To request a Fire Department visit, call <a href="tel:8473186721" class="permit-phone">847-318-6721</a> at least a week ahead — they can only attend 6 block parties/day, first-come first-served</li>
+            <li>General permit questions: <a href="tel:8473185240" class="permit-phone">847-318-5240</a></li>
+          </ul>
+        </div>
+
+        <a
+          href="https://parkridgeil.rja.revize.com/forms/3782"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary permit-apply-btn"
+        >📄 Open Permit Application</a>
+      </div>
+    </details>
   `;
 }
 
