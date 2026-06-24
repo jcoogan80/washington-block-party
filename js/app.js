@@ -113,7 +113,18 @@ watchAuthState(async (user) => {
   }
 
   appState.user = user;
-  const userDoc = await getUserDoc(user.uid);
+
+  let userDoc;
+  try {
+    userDoc = await getUserDoc(user.uid);
+  } catch (err) {
+    // Firestore read failed (e.g. rules not yet propagated, token issue).
+    // Show auth screen and let the user try again rather than crashing silently.
+    showScreen('auth-screen');
+    showToast('Could not load account data. Please sign in again.', 'error');
+    await logoutUser();
+    return;
+  }
 
   if (!userDoc) {
     // Edge case: Firebase Auth account exists but Firestore doc missing
