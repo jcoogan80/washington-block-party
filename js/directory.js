@@ -3,7 +3,14 @@ import {
   collection, doc, updateDoc, deleteDoc, onSnapshot,
   query
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { escHtml, getInitials } from './app.js';
+import { escHtml } from './app.js';
+
+// Extract the first integer from an address string ("404 N. Washington" → 404).
+// Returns Infinity for entries with no parseable number so they sort to the end.
+function addrNum(address) {
+  const m = (address || '').match(/\d+/);
+  return m ? parseInt(m[0], 10) : Infinity;
+}
 
 let _unsub = null;
 
@@ -24,8 +31,8 @@ export function init(container, state, utils) {
     (snap) => {
       const entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       entries.sort((a, b) => {
-        const numA = parseInt(a.address, 10) || Infinity;
-        const numB = parseInt(b.address, 10) || Infinity;
+        const numA = addrNum(a.address);
+        const numB = addrNum(b.address);
         if (numA !== numB) return numA - numB;
         return (a.name || '').localeCompare(b.name || '');
       });
@@ -72,11 +79,13 @@ function renderDirectory(entries, state, utils) {
 function dirCard(entry, state) {
   const isOwn   = entry.uid === state.user?.uid;
   const canEdit = isOwn || state.isAdmin;
+  const num     = addrNum(entry.address);
+  const avatarText = num < Infinity ? String(num) : '?';
 
   return `
     <div class="dir-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
-        <div class="dir-avatar">${escHtml(getInitials(entry.name))}</div>
+        <div class="dir-avatar">${escHtml(avatarText)}</div>
         ${canEdit ? `
           <div class="card-actions">
             <button class="btn btn-ghost btn-sm" data-edit-dir="${entry.id}">✏️ Edit</button>
