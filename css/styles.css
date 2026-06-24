@@ -727,6 +727,60 @@ textarea { min-height: 90px; resize: vertical; }
 #trivia-qr-code img,
 #trivia-qr-code canvas { display: block; border-radius: var(--radius-sm); }
 
+/* ── 2025 Reference Itinerary ──────────────────────────────────────────────── */
+.ref-itinerary {
+  margin-top: 2rem;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+  overflow: hidden;
+}
+.ref-summary {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .9rem 1.1rem;
+  cursor: pointer;
+  list-style: none;          /* hide default marker in Firefox */
+  user-select: none;
+}
+.ref-summary::-webkit-details-marker { display: none; } /* hide in Chrome/Safari */
+.ref-summary:hover { background: #ece9e0; }
+.ref-summary-label {
+  flex: 1; font-size: .9rem; font-weight: 700; color: var(--text-muted);
+}
+.ref-badge {
+  background: var(--bg-alt); color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-size: .68rem;
+}
+.ref-chevron {
+  font-size: 1.1rem; color: var(--text-muted); font-weight: 700;
+  display: inline-block; transition: transform .2s ease;
+}
+details[open].ref-itinerary .ref-chevron { transform: rotate(90deg); }
+
+.ref-body { padding: 0 1.1rem 1.1rem; }
+.ref-subtitle {
+  font-size: .82rem; color: var(--text-muted); font-style: italic;
+  margin-bottom: .85rem; line-height: 1.5;
+  padding-top: .1rem;
+  border-top: 1px solid var(--border);
+  padding-top: .75rem;
+}
+.ref-list { display: flex; flex-direction: column; gap: 0; }
+.ref-row {
+  display: flex; align-items: baseline; gap: 1rem;
+  padding: .4rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .875rem;
+}
+.ref-row:last-child { border-bottom: none; }
+.ref-time {
+  flex-shrink: 0; width: 5.5rem;
+  font-weight: 700; color: var(--text-muted);
+  font-size: .8rem; text-transform: uppercase; letter-spacing: .02em;
+}
+.ref-title { color: var(--text); }
+
 /* ── Date Poll ─────────────────────────────────────────────────────────────── */
 .poll-card {
   background: var(--card-bg);

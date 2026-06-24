@@ -5,6 +5,22 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { escHtml } from './app.js';
 
+const REF_2025 = [
+  { time: '11:00 AM', title: 'Block closes for traffic' },
+  { time: '12:00 PM', title: 'Bounce House is up' },
+  { time: '1:00 PM',  title: 'Music starts' },
+  { time: '3:00 PM',  title: 'Sno cone machine up' },
+  { time: '4:00 PM',  title: 'Grill food' },
+  { time: '5:00 PM',  title: 'Decorate cupcakes' },
+  { time: '6:00 PM',  title: 'Piñata' },
+  { time: '7:00 PM',  title: '(open / free time)' },
+  { time: '8:00 PM',  title: 'Bring out glow bracelets' },
+  { time: '9:00 PM',  title: 'Projector movie on for kids' },
+  { time: '9:00 PM',  title: 'Light fire pit' },
+  { time: '9:00 PM',  title: 'Turn off inflatable' },
+  { time: '11:00 PM', title: 'Open block up to street traffic' },
+];
+
 let _unsub = null;
 
 export function init(container, state, utils) {
@@ -14,6 +30,7 @@ export function init(container, state, utils) {
       ${state.isAdmin ? `<button class="btn btn-primary btn-sm" id="new-slot-btn">+ Add Time Slot</button>` : ''}
     </div>
     <div id="schedule-list"></div>
+    <div id="schedule-ref"></div>
   `;
 
   if (state.isAdmin) {
@@ -30,6 +47,36 @@ export function init(container, state, utils) {
       renderSchedule(slots, state, utils);
     }
   );
+
+  renderRefItinerary(container.querySelector('#schedule-ref'));
+}
+
+function renderRefItinerary(wrap) {
+  wrap.innerHTML = `
+    <details class="ref-itinerary">
+      <summary class="ref-summary">
+        <span class="ref-summary-label">
+          📋 Last Year's Itinerary (2025) — for reference
+        </span>
+        <span class="badge ref-badge">Historical</span>
+        <span class="ref-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="ref-body">
+        <p class="ref-subtitle">
+          This is what we did last year. This year's exact schedule may differ
+          once we lock in activities and the date.
+        </p>
+        <div class="ref-list">
+          ${REF_2025.map(item => `
+            <div class="ref-row">
+              <span class="ref-time">${escHtml(item.time)}</span>
+              <span class="ref-title">${escHtml(item.title)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </details>
+  `;
 }
 
 function renderSchedule(slots, state, utils) {
