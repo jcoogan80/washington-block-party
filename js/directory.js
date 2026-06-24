@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import {
   collection, doc, updateDoc, deleteDoc, onSnapshot,
-  query, orderBy
+  query
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { escHtml, getInitials } from './app.js';
 
@@ -20,9 +20,15 @@ export function init(container, state, utils) {
 
   if (_unsub) _unsub();
   _unsub = onSnapshot(
-    query(collection(db, 'directory'), orderBy('name', 'asc')),
+    query(collection(db, 'directory')),
     (snap) => {
       const entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      entries.sort((a, b) => {
+        const numA = parseInt(a.address, 10) || Infinity;
+        const numB = parseInt(b.address, 10) || Infinity;
+        if (numA !== numB) return numA - numB;
+        return (a.name || '').localeCompare(b.name || '');
+      });
       renderDirectory(entries, state, utils);
     }
   );
