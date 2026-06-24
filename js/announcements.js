@@ -4,6 +4,7 @@ import {
   serverTimestamp, query, orderBy, setDoc, getDoc, arrayUnion, arrayRemove
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { escHtml } from './app.js';
+import { initPoll } from './poll.js';
 
 const EMOJIS = ['👍','❤️','😂','🎉','🙌','🔥'];
 
@@ -12,6 +13,7 @@ let _unsub = null;
 export function init(container, state, utils) {
   container.innerHTML = `
     <div id="event-banner-wrap"></div>
+    <div id="poll-wrap"></div>
     <div class="section-header">
       <h2>Announcements</h2>
       ${state.isAdmin ? `<button class="btn btn-primary btn-sm" id="new-ann-btn">+ Post</button>` : ''}
@@ -20,6 +22,7 @@ export function init(container, state, utils) {
   `;
 
   loadEventBanner(state, utils);
+  initPoll(container.querySelector('#poll-wrap'), state, utils);
 
   if (state.isAdmin) {
     container.querySelector('#new-ann-btn')?.addEventListener('click', () => {

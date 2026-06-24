@@ -727,6 +727,93 @@ textarea { min-height: 90px; resize: vertical; }
 #trivia-qr-code img,
 #trivia-qr-code canvas { display: block; border-radius: var(--radius-sm); }
 
+/* ── Date Poll ─────────────────────────────────────────────────────────────── */
+.poll-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+.poll-card-title { color: var(--nav); margin-bottom: .3rem; }
+.poll-card-sub   { color: var(--text-muted); font-size: .875rem; margin-bottom: 1rem; }
+.poll-loading    { padding: .5rem 0; }
+
+.poll-options { display: flex; flex-direction: column; gap: .4rem; }
+.poll-option {
+  display: flex; align-items: center; gap: .85rem;
+  padding: .7rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  user-select: none;
+}
+.poll-option:hover { border-color: var(--accent); background: var(--accent-light); }
+/* Hide native checkbox; keep it in the DOM for form submission */
+.poll-option input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* Custom checkbox box */
+.poll-checkbox {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  background: var(--card-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; font-weight: 700;
+  transition: border-color var(--transition), background var(--transition);
+}
+.poll-option input:checked ~ .poll-checkbox {
+  background: var(--nav);
+  border-color: var(--nav);
+  color: var(--accent);
+}
+.poll-option input:checked ~ .poll-checkbox::after { content: '✓'; color: var(--accent); }
+
+/* Highlight the whole row when checked */
+.poll-option:has(input:checked) {
+  border-color: var(--nav);
+  background: var(--info-light);
+}
+.poll-option-text { font-size: .93rem; font-weight: 600; color: var(--text); }
+
+.poll-actions  { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; flex-wrap: wrap; }
+.poll-confirmed {
+  background: var(--success-light); color: var(--success);
+  border-radius: var(--radius-sm); padding: .75rem 1rem;
+  font-weight: 600; font-size: .95rem;
+}
+
+/* ── Admin: Poll Results ────────────────────────────────────────────────────── */
+.poll-result-row {
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.poll-result-row:last-child { border-bottom: none; }
+.poll-result-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: .5rem; margin-bottom: .45rem;
+}
+.poll-result-date  { font-size: .9rem; font-weight: 600; color: var(--nav); }
+.poll-result-count { font-size: .82rem; font-weight: 700; color: var(--accent-dark); flex-shrink: 0; }
+.poll-result-bar-wrap {
+  background: var(--bg-alt); border-radius: 4px; height: 10px; overflow: hidden;
+}
+.poll-result-bar {
+  height: 100%; background: var(--nav); border-radius: 4px;
+  transition: width .4s ease; min-width: 3px;
+}
+.poll-result-details { margin-top: .4rem; }
+.poll-result-details summary {
+  font-size: .8rem; color: var(--text-muted); cursor: pointer; font-weight: 600;
+  list-style: none; display: inline-flex; align-items: center; gap: .3rem;
+}
+.poll-result-details summary::before { content: '▶'; font-size: .6rem; }
+.poll-result-details[open] summary::before { content: '▼'; }
+.poll-result-names { font-size: .85rem; color: var(--text); margin-top: .3rem; line-height: 1.6; }
+
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   #app-main { padding: 1rem .75rem; }

@@ -312,6 +312,70 @@ async function openAdminPanel() {
   }
 }
 
+const POLL_DATES = [
+  'Saturday, August 15, 2026',
+  'Saturday, August 22, 2026',
+  'Saturday, August 29, 2026',
+  'Saturday, September 5, 2026',
+  'Saturday, September 12, 2026',
+  'Saturday, September 19, 2026',
+  'Saturday, September 26, 2026',
+];
+
+async function loadAdminPollResults(panel) {
+  panel.innerHTML = '<div class="loading"><div class="spinner"></div> Loading poll results…</div>';
+  try {
+    const snap  = await getDocs(collection(db, 'poll'));
+    const votes = snap.docs.map(d => d.data());
+
+    // Tally votes per date
+    const totals = {};
+    POLL_DATES.forEach(d => { totals[d] = { count: 0, names: [] }; });
+    votes.forEach(v => {
+      (v.dates || []).forEach(date => {
+        if (totals[date]) {
+          totals[date].count++;
+          totals[date].names.push(v.displayName || 'Unknown');
+        }
+      });
+    });
+
+    // Sort highest votes first; keep original order as tiebreaker
+    const sorted   = [...POLL_DATES].sort((a, b) => totals[b].count - totals[a].count);
+    const maxCount = Math.max(...sorted.map(d => totals[d].count), 1);
+    const total    = votes.length;
+
+    panel.innerHTML = `
+      <p class="text-muted" style="margin-bottom:1rem;font-size:.85rem;">
+        ${total} neighbor${total !== 1 ? 's' : ''} responded
+      </p>
+      ${sorted.map(date => {
+        const { count, names } = totals[date];
+        const pct = Math.round((count / maxCount) * 100);
+        return `
+          <div class="poll-result-row">
+            <div class="poll-result-header">
+              <span class="poll-result-date">${escHtml(date)}</span>
+              <span class="poll-result-count">${count} vote${count !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="poll-result-bar-wrap">
+              <div class="poll-result-bar" style="width:${pct}%"></div>
+            </div>
+            ${names.length > 0 ? `
+              <details class="poll-result-details">
+                <summary>${names.length} neighbor${names.length !== 1 ? 's' : ''} available</summary>
+                <p class="poll-result-names">${names.map(n => escHtml(n)).join(' · ')}</p>
+              </details>
+            ` : '<p class="text-muted" style="font-size:.8rem;margin-top:.3rem;">No votes yet</p>'}
+          </div>
+        `;
+      }).join('')}
+    `;
+  } catch (err) {
+    panel.innerHTML = `<p class="text-danger">Error loading poll results: ${escHtml(err.message)}</p>`;
+  }
+}
+
 function renderAdminPanel(container, users) {
   const pending  = users.filter(u => !u.approved);
   const approved = users.filter(u => u.approved);
@@ -324,6 +388,9 @@ function renderAdminPanel(container, users) {
       <button class="admin-tab-btn" data-atab="approved">
         Members (${approved.length})
       </button>
+      <button class="admin-tab-btn" data-atab="poll">
+        📅 Poll Results
+      </button>
     </div>
     <div id="atab-pending" class="admin-tab-panel active">
       ${pending.length === 0
@@ -333,15 +400,21 @@ function renderAdminPanel(container, users) {
     <div id="atab-approved" class="admin-tab-panel">
       ${approved.map(u => userRow(u, true)).join('')}
     </div>
+    <div id="atab-poll" class="admin-tab-panel"></div>
   `;
 
-  // Admin tab switching
+  // Admin tab switching — lazy-loads poll results on first click
   container.querySelectorAll('.admin-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       container.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
       container.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById(`atab-${btn.dataset.atab}`).classList.add('active');
+      const panel = document.getElementById(`atab-${btn.dataset.atab}`);
+      panel.classList.add('active');
+      if (btn.dataset.atab === 'poll' && !panel.dataset.loaded) {
+        panel.dataset.loaded = '1';
+        loadAdminPollResults(panel);
+      }
     });
   });
 

@@ -79,5 +79,22 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ── settings ──────────────────────────────────────────────────────────
+    // Stores event details (date, time, location, theme). All logged-in
+    // users can read; only admin can write.
+    match /settings/{docId} {
+      allow read:  if isAuthed();
+      allow write: if isAdmin();
+    }
+
+    // ── poll ──────────────────────────────────────────────────────────────
+    // Each document ID = uid. Users can read/write only their own vote.
+    // Admins can read all documents to tally results.
+    match /poll/{uid} {
+      allow read:  if isOwner(uid);   // user sees their own saved selection
+      allow read:  if isAdmin();      // admin reads all for results view
+      allow write: if isOwner(uid);   // users submit/update their own vote only
+    }
+
   }
 }
