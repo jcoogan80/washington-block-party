@@ -14,6 +14,12 @@ export function init(container, state, utils) {
   container.innerHTML = `
     <div id="event-banner-wrap"></div>
     <div id="poll-wrap"></div>
+    <div class="card flyer-card">
+      <h3 class="flyer-card-title">📄 This Year's Flyer</h3>
+      <img src="images/washington_street_flyer_2026.png"
+           alt="Washington Street Block Party 2026 flyer"
+           class="flyer-img">
+    </div>
     <div class="section-header">
       <h2>Announcements</h2>
       ${state.isAdmin ? `<button class="btn btn-primary btn-sm" id="new-ann-btn">+ Post</button>` : ''}

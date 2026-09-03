@@ -279,6 +279,19 @@ textarea { min-height: 90px; resize: vertical; }
 }
 .section-header h2 { color: var(--nav); }
 
+/* ── Flyer Card ────────────────────────────────────────────────────────────── */
+.flyer-card { margin-bottom: 1.5rem; text-align: center; }
+.flyer-card-title { color: var(--nav); margin-bottom: .9rem; }
+.flyer-img {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
 /* ── Event Banner ──────────────────────────────────────────────────────────── */
 .event-banner {
   background: linear-gradient(135deg, var(--nav) 0%, #263d85 100%);
