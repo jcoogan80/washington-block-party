@@ -292,6 +292,72 @@ textarea { min-height: 90px; resize: vertical; }
   box-shadow: var(--shadow);
 }
 
+/* ── Nearby Block Party Card ───────────────────────────────────────────────── */
+.nearby-party-card { margin-bottom: 1.5rem; }
+.nearby-party-title { color: var(--nav); margin-bottom: .6rem; }
+.nearby-party-text {
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 1.1rem;
+}
+.nearby-party-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+.nearby-party-img-link {
+  display: block;
+  flex: 1 1 300px;
+  max-width: 400px;
+  cursor: zoom-in;
+}
+.nearby-party-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.nearby-party-img-link:hover .nearby-party-img {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+@media (max-width: 640px) {
+  .nearby-party-images { flex-direction: column; align-items: center; }
+  .nearby-party-img-link { flex-basis: auto; width: 100%; }
+}
+
+/* ── Image Lightbox ────────────────────────────────────────────────────────── */
+.img-lightbox {
+  position: fixed; inset: 0; z-index: 3000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.img-lightbox-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.8);
+}
+.img-lightbox-img {
+  position: relative;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.img-lightbox-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 40px; height: 40px;
+  border: none; border-radius: 50%;
+  background: rgba(255,255,255,.9); color: var(--text);
+  font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
 /* ── Event Banner ──────────────────────────────────────────────────────────── */
 .event-banner {
   background: linear-gradient(135deg, var(--nav) 0%, #263d85 100%);

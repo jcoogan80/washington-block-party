@@ -20,6 +20,31 @@ export function init(container, state, utils) {
            alt="Washington Street Block Party 2026 flyer"
            class="flyer-img">
     </div>
+    <div class="card nearby-party-card">
+      <h3 class="nearby-party-title">🎉 Also Happening That Day</h3>
+      <p class="nearby-party-text">
+        The 100–300 blocks of Washington are throwing their block party the same
+        day and time as us (Sept 19, 3pm–10:30pm). We're welcome to wander over —
+        they've got an inflatable night club and two inflatable water slides.
+        Their flyer and a photo of the night club setup are below.
+      </p>
+      <div class="nearby-party-images">
+        <a href="images/other_block_party_flyer.png" class="nearby-party-img-link"
+           data-lightbox="images/other_block_party_flyer.png"
+           target="_blank" rel="noopener">
+          <img src="images/other_block_party_flyer.png"
+               alt="Flyer for the 100–300 blocks of Washington block party"
+               class="nearby-party-img" loading="lazy">
+        </a>
+        <a href="images/other_block_party_nightclub.jpeg" class="nearby-party-img-link"
+           data-lightbox="images/other_block_party_nightclub.jpeg"
+           target="_blank" rel="noopener">
+          <img src="images/other_block_party_nightclub.jpeg"
+               alt="Photo of the inflatable night club setup"
+               class="nearby-party-img" loading="lazy">
+        </a>
+      </div>
+    </div>
     <div class="section-header">
       <h2>Announcements</h2>
       ${state.isAdmin ? `<button class="btn btn-primary btn-sm" id="new-ann-btn">+ Post</button>` : ''}
@@ -29,6 +54,7 @@ export function init(container, state, utils) {
 
   loadEventBanner(state, utils);
   initPoll(container.querySelector('#poll-wrap'), state, utils);
+  bindLightbox(container);
 
   if (state.isAdmin) {
     container.querySelector('#new-ann-btn')?.addEventListener('click', () => {
@@ -45,6 +71,44 @@ export function init(container, state, utils) {
       renderFeed(docs, state, utils);
     }
   );
+}
+
+// ── Image Lightbox ───────────────────────────────────────────────────────────
+
+function bindLightbox(container) {
+  container.querySelectorAll('[data-lightbox]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Let modified clicks / middle-clicks fall through to a real new tab
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1) return;
+      e.preventDefault();
+      openLightbox(link.dataset.lightbox, link.querySelector('img')?.alt || '');
+    });
+  });
+}
+
+function openLightbox(src, alt) {
+  document.querySelectorAll('.img-lightbox').forEach(el => el.remove());
+
+  const box = document.createElement('div');
+  box.className = 'img-lightbox';
+  box.innerHTML = `
+    <div class="img-lightbox-overlay"></div>
+    <img src="${escHtml(src)}" alt="${escHtml(alt)}" class="img-lightbox-img">
+    <button class="img-lightbox-close" aria-label="Close">✕</button>
+  `;
+  document.body.appendChild(box);
+  document.body.style.overflow = 'hidden';
+
+  const close = () => {
+    box.remove();
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+  };
+  const onKey = (ev) => { if (ev.key === 'Escape') close(); };
+
+  box.querySelector('.img-lightbox-overlay').addEventListener('click', close);
+  box.querySelector('.img-lightbox-close').addEventListener('click', close);
+  document.addEventListener('keydown', onKey);
 }
 
 // ── Event Banner ──────────────────────────────────────────────────────────────
